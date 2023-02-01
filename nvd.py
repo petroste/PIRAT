@@ -23,7 +23,7 @@ from datetime import datetime, timedelta, date
 
 def searchNVD(model):
     # find a way to securely store the key somewhere
-    cveList = nvdlib.searchCVE(keywordSearch=model, key="b74a27f9-05ff-48a4-8a31-8bcf1f88082f")
+    cveList = nvdlib.searchCVE(keywordSearch=model)
     return cveList
 
 def getDescriptionCVE(cveItem):
