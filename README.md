@@ -32,24 +32,17 @@ PIRAT - Python Risk Assessment Tool
 
 <!-- PROJECT LOGO -->
 <br />
-<div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-<h3 align="center">project_title</h3>
 
   <p align="center">
-    project_description
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/petroste/PIRAT"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <a href="https://github.com/petroste/PIRAT">View Demo</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
+    <a href="https://github.com/petroste/PIRAT/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/petroste/PIRAT/issues">Request Feature</a>
   </p>
 </div>
 
@@ -86,9 +79,9 @@ PIRAT - Python Risk Assessment Tool
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+<img width="1673" alt="Screenshot 2023-05-05 at 1 08 43 PM" src="https://user-images.githubusercontent.com/43624414/236522197-af4c2dd4-a53e-4fed-b044-bb9387b3f2f2.png">
 
-Here's a blank template to get started: To avoid retyping too much info. Do a search and replace with your text editor for the following: `github_username`, `repo_name`, `twitter_handle`, `linkedin_username`, `email_client`, `email`, `project_title`, `project_description`
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -128,23 +121,13 @@ None so far
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+1. Please select a PLC manufacturer and the industry of your organization from the corresponding dropdown menus
+2. Select the appropriate output type - 'Risk assessment only' is the default. If 'Verbose' selected, specify whether you want the CVE descriptions to be outputted
+3. Enter the model of the PLC in the search bar - do not include the name of the manufacturer
+4. Check the appropriate impact boxes based on the consequences as a result of a PLC attack
 
-_For more examples, please refer to the [Documentation](https://example.com)_
+<img width="1170" alt="Screenshot 2023-05-05 at 1 15 03 PM" src="https://user-images.githubusercontent.com/43624414/236524925-339497b6-c0dd-4f30-83e9-0b3d4b899fc9.png">
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-    - [ ] Nested Feature
-
-See the [open issues](https://github.com/petroste/repo_name/issues) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -182,7 +165,9 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 Stefan Petrović - petroste@my.yorku.ca
 
-Project Link: [https://github.com/petroste/pirat](https://github.com/petroste/pirat)
+https://www.linkedin.com/in/petrovic-stefan/
+
+Project Link: [https://github.com/petroste/PIRAT](https://github.com/petroste/PIRAT)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -191,9 +176,8 @@ Project Link: [https://github.com/petroste/pirat](https://github.com/petroste/pi
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-* []()
-* []()
-* []()
+* Professor Natalija Vlajić
+* Gabriele Cianfarani
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -212,7 +196,7 @@ Project Link: [https://github.com/petroste/pirat](https://github.com/petroste/pi
 [license-shield]: https://img.shields.io/github/license/petroste/pirat.svg?style=for-the-badge
 [license-url]: https://github.com/petroste/pirat/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/linkedin_username
+[linkedin-url]: https://linkedin.com/in/petrovic-stefan
 [product-screenshot]: images/screenshot.png
 
 [Python.org]:https://www.python.org/static/community_logos/python-logo-master-v3-TM.png
