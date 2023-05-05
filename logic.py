@@ -14,26 +14,27 @@ def calculateRisk(entryField, industryDropdown, manufacturerDropdown, selection,
     # use entry field as an argument for search
     searchTermList = getSearchTermList(entryField, manufacturerDropdown)
     resultTuple = searchPLCInfoNVD(searchTermList)
-   # cat1Multiplier = getCat1ImpactMultiplier(cat1)
-   # cat2Multiplier = getCat2ImpactMultiplier(cat2)
-   # cat3Multiplier = getCat3ImpactMultiplier(cat3)
-   # cat4Multiplier = getCat4ImpactMultiplier(cat4)
-   # cat5Multiplier = getCat5ImpactMultiplier(cat5)
-   # cat6Multiplier = getCat6ImpactMultiplier(cat6)
+    damageToProperty = getImpactMultiplier(categoryList[0])
+    internalOpLoss = getImpactMultiplier(categoryList[1])
+    externalOpLoss = getImpactMultiplier(categoryList[2])
+    opInfoTheft = getImpactMultiplier(categoryList[3])
+    controlLoss = getImpactMultiplier(categoryList[4])
+    viewLoss = getImpactMultiplier(categoryList[5])
+    controlManipulation = getImpactMultiplier(categoryList[6])
+    viewManipulation = getImpactMultiplier(categoryList[7])
     cveList = resultTuple[0]
     searchIndex = resultTuple[1]
+    actorsList = getListOfActorsForIndustry(industryDropdown)
 
     # check whether the cveList is empty - useless to continue if not
     errorNoCVE(cveList)
 
     # If verbose, generate verbose output
     if selection == 2:
-        verbose = generateVerboseOutput(cveList, False)
+        verbose = generateVerboseOutput(cveList, actorsList, False)
     elif selection == 3:
         # if the description checkbox was seleced then also print out the description for each CVE
-        verbose = generateVerboseOutput(cveList, True)
-    
-    # actorsList = getListOfActorsForIndustry(industryDropdown)
+        verbose = generateVerboseOutput(cveList, actorsList, True)
 
     cvssScore = 0.0
     availabilityEff = 0.0
@@ -42,8 +43,9 @@ def calculateRisk(entryField, industryDropdown, manufacturerDropdown, selection,
     exploitabilityScore = 0.0
     impactScore = 0.0
     numberVuln = len(cveList)
-    actorsScore = 0.0 # MITRE ATT&CK SCORE
- 
+    actorsScore = getActorNumberRiskScore(actorsList)
+    impactCat = damageToProperty * internalOpLoss * externalOpLoss * opInfoTheft * controlLoss * viewLoss * controlManipulation * viewManipulation
+
     for eachCVE in reversed(cveList):
         if getBaseScoreCVE(eachCVE) == -1:
             # There is no base score for the CVE, likely very recent
@@ -68,12 +70,12 @@ def calculateRisk(entryField, industryDropdown, manufacturerDropdown, selection,
     exploitabilityScore /= numberVuln
     impactScore /= numberVuln
 
-    formulaRes = (exploitabilityScore + confidentialityEff + integrityEff + impactScore) / 4
+    formulaRes = ((exploitabilityScore + confidentialityEff + integrityEff + impactScore) / 4 * actorsScore * impactCat) / 3
 
-    totalRiskOutput = outputRiskInfo(exploitabilityScore, confidentialityEff, integrityEff, impactScore, formulaRes, numberVuln, searchTermList[searchIndex], selection, verbose)
+    totalRiskOutput = outputRiskInfo(industryDropdown, actorsList, exploitabilityScore, confidentialityEff, integrityEff, impactScore, formulaRes, numberVuln, searchTermList[searchIndex], selection, verbose)
     return totalRiskOutput
 
-def outputRiskInfo(exploitabilityScore, confidentialityEff, integrityEff, impactScore, formulaRes, numberVuln, searchTerm, selection, verbose):
+def outputRiskInfo(industryDropdown, actorsList, exploitabilityScore, confidentialityEff, integrityEff, impactScore, formulaRes, numberVuln, searchTerm, selection, verbose):
 
     output = "The number of vulnerabilities for this PLC family is:\n"
     output += str(numberVuln) + "\n"
@@ -96,6 +98,7 @@ def outputRiskInfo(exploitabilityScore, confidentialityEff, integrityEff, impact
         output += "Your device is at medium risk\n"
     else:
         output += "Your device is at low risk!\n"
+    output += "The number of APTs that attack the " + industryDropdown + " industry: " + str(len(actorsList)) + "\n"
     output += "The term we searched for is: " + searchTerm + "\n" 
     # output += "The actors which attack the " + industryDropdown + "industry are\n"
 
@@ -110,8 +113,16 @@ def outputRiskInfo(exploitabilityScore, confidentialityEff, integrityEff, impact
 
     return output
 
-def generateVerboseOutput(cveList, description):
-    verbose = "Here is some information about the latest CVEs impacting this PLC family.\n\n"
+def generateVerboseOutput(cveList, actorsList, description):
+    verbose = ""
+    if (len(actorsList) > 0):
+        verbose += "\nAPTs that are known to attack this industry:\n\n"
+        verbose += "["
+        for actor in actorsList:
+            verbose += actor + ", "
+        verbose = re.sub(r"..$", "] ", verbose)
+        verbose += "\n\n"
+    verbose += "Here is some information about the latest CVEs impacting this PLC family.\n\n"
 
     for eachCVE in reversed(cveList):
         if getBaseScoreCVE(eachCVE) == -1:
@@ -193,45 +204,19 @@ def getSearchTermList(entryField, manufacturerDropdown):
 
     return searchTermList
 
-def getYearAlphaValue(year):
-    alpha = 0
-    if year == "2022":
-        alpha = 1
-    elif year == "2021":
-        alpha = 0.9
-    elif year == "2020":
-        alpha = 0.8
-    elif year == "2019":
-        alpha = 0.7
-    elif year == "2018":
-        alpha = 0.6
-    elif year == "2017":
-        alpha = 0.5
-    elif year == "2016":
-        alpha = 0.4
-    elif year == "2015":
-        alpha = 0.3
-    elif year == "2014":
-        alpha = 0.2
-    elif year == "2013":
-        alpha = 0.1
-    elif year == "2012":
-        alpha = 0.05
-    else:
-        alpha = 0.01
-
-def getCat1Multiplier(category):
+def getImpactMultiplier(category):
     multiplier = 1
     if category == 5:
-        multiplier = 1.5
+        multiplier = 1
     elif category == 4:
-        multiplier = 1.2
+        multiplier = 0.95
     elif category == 3:
-        multiplier = 1.0
+        multiplier = 0.9
     elif category == 2:
-        multiplier = 0.8
+        multiplier = 0.85
     elif category == 1:
-        multiplier = 0.5
+        multiplier = 0.8
+    return multiplier
 
 def getCat2Multiplier(category):
     multiplier = 1
