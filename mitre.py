@@ -1,8 +1,8 @@
-from pyattck import Attck
+from pyattck import *
 
-
+attack = Attck()
 # IMPORTANT!!!
-# pyattck does not work currently due to https://github.com/swimlane/pyattck/issues/125
+# pyattck does not work currently due to https://github.com/swimlane/pyattck/issues/125 -> RESOLVED
 # check updates for the resolution to the problem
 
 # accessing malware
@@ -17,24 +17,27 @@ from pyattck import Attck
 
 def getListOfActorsForIndustry(industryName):
     actorsList = []
-    attack = Attck()
     for actor in attack.enterprise.actors:
-        if industryName in actor.description:
+        if actor.description is not None and industryName.lower() in actor.description:
             actorsList.append(actor.name)
     return actorsList
 
-def getRiskScoreActorMultiplier(numActors):
-    multiplier = 1
-    counter = 0
-    while counter < numActors:
-        multiplier *= 1.1 # This number can be changed to whatever
-    return multiplier
+def getActorNumberRiskScore(actorsList):
+    numActors = len(actorsList)
+    if numActors == 0:
+        return 0
+    elif numActors == 1:
+        return 5
+    elif numActors == 2:
+        return 6
+    elif numActors == 3:
+        return 7
+    elif numActors == 4:
+        return 8
+    elif numActors == 5:
+        return 9
+    elif numActors >= 6:
+        return 10
+    else:
+        return 0
 
-def getActorScore(numActors):
-    score = 0.0
-    
-    return score
-
-
-
-# get countries of actors --, count them, display a country per country view
